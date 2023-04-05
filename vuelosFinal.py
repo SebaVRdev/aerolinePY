@@ -1,5 +1,12 @@
 import os
 
+# De la carpeta helpers archivo validarRut, importamos la funcion "validateRut"
+from helpers.validarRut import validateRUT, digito_verificador  #Con ',' podemos seguir agregando funciones 
+# from helpers import *  #De la carpeta helpers, traeme todo
+
+DV = digito_verificador("20242383-3")
+print(DV)
+
 #NOS DA la carpeta en la que estamos trabajando. automatico ruta
 rutaProyecto = os.path.dirname(os.path.realpath(__file__))
 
@@ -130,7 +137,7 @@ while menu != '0' :
         print('MODIFICAR DATOS DE PASAJERO')
 
         #SOLICITA EL ASIENTO Y RUT(PARA VERIFICAR DATOS)
-        sRUT = input('Ingrese su RUT para la información : ')
+        sRUT = input('Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): ')
         #SI NO SE ENCUENTRA VOLVEMOS A SOLICITAR LA INFORMACION
         while sRUT not in usuarios and sRUT != '0':
             sRUT = input('El RUT no se encuentra, porfavor ingrese su RUT valido para verificar la información o 0 para salir. : ')
