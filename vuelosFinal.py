@@ -1,10 +1,10 @@
 import os
 
 # De la carpeta helpers archivo validarRut, importamos la funcion "validateRut"
-from helpers.validarRut import validateRUT, digito_verificador  #Con ',' podemos seguir agregando funciones 
+from helpers.validarRut import digito_verificador  #Con ',' podemos seguir agregando funciones 
 # from helpers import *  #De la carpeta helpers, traeme todo
 
-DV = digito_verificador("20242383-3")
+DV = digito_verificador("20790208-k")
 print(DV)
 
 #NOS DA la carpeta en la que estamos trabajando. automatico ruta
@@ -16,7 +16,9 @@ rutaAsientos = rutaProyecto + r'\aerolinea.txt'
 listaAsientos = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42]
 
 #DICCIONARIO DE USUARIOS VACIO
-usuarios = {}
+usuarios = {
+    #rut: [datos]
+}
 
 #METODO MOSTRAR ASIENTOS
 def mostrarAsientos():
@@ -54,8 +56,9 @@ ocupados = llenarListaOcupados(rutaAsientos)
 #METODO DE COMPRA
 def realizarCompra(rutUsuario,nombre,numAsiento,tel,precio,Banco):
     totalDescuento = 0
-    indice = numAsiento - 1
+    indice         = numAsiento - 1
     print("Numero Asiento: " + str(numAsiento) + " Precio: " + str(precio)+" Banco del Usuario: "+Banco)
+    
     if Banco == "bancoUmayor":
         print("entro")
         totalDescuento = precio - (precio * 0.15)
@@ -63,7 +66,7 @@ def realizarCompra(rutUsuario,nombre,numAsiento,tel,precio,Banco):
         totalDescuento = precio
 
     listaAsientos[indice] = "X"
-    usuarios[rutUsuario] = [numAsiento,nombre,tel,Banco,totalDescuento]
+    usuarios[rutUsuario]  = [numAsiento,nombre,tel,Banco,totalDescuento]
         
 
 # INICIO de la aplicacion y su MENU
@@ -101,7 +104,11 @@ while menu != '0' :
         
         #SOLICITAMOS LOS DATOS DEL PASAJERO
         nombrePasajero = input("Ingerse el nombre del pasajero : \n")
-        rutPasajero=input("Ingerse el rut del pasajero : \n")
+        rutPasajero=input("Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): \n")
+        #VERIFICAMOS que se haya ingresado un rut valido
+        while not digito_verificador(rutPasajero):
+            rutPasajero = input('Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): ')
+  
         telefonoPasajero = input("Ingrese le telefono del pasajero : \n")
         bancoPasajero = input("Ingrese el banco del pasajero : \n")
         
@@ -122,15 +129,20 @@ while menu != '0' :
         os.system('cls')
         print('***ANULAR VUELO***')
         sRUT = input('Ingrese su RUT para la información : ')
+        while not digito_verificador(sRUT):
+            sRUT = input('Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): ')
+          
         if sRUT in usuarios :
             asientoUsu = usuarios[sRUT][0]
             if listaAsientos[asientoUsu - 1] == "X": 
                 #SIGNIFICA QUE HAY UN ASIENTO COMPRADO
                 listaAsientos[asientoUsu - 1] = asientoUsu
+                
+                #ELIMINAMOS el usuario de los registros
                 del usuarios[sRUT]
                 print('SE ANULO EL VUELO INGRESADO CON EXITO!')
         else:
-            print("NO EXISTE ESTE RUT")
+            print("NO EXISTE ESTE RUT EN LOS REGISTROS")
 
     elif menu == '5' :
         os.system('cls')
@@ -138,6 +150,9 @@ while menu != '0' :
 
         #SOLICITA EL ASIENTO Y RUT(PARA VERIFICAR DATOS)
         sRUT = input('Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): ')
+        while not digito_verificador(sRUT):
+            sRUT = input('Ingrese su RUT para la información (sin puntos y Con '-' y digito verificador): ')
+            
         #SI NO SE ENCUENTRA VOLVEMOS A SOLICITAR LA INFORMACION
         while sRUT not in usuarios and sRUT != '0':
             sRUT = input('El RUT no se encuentra, porfavor ingrese su RUT valido para verificar la información o 0 para salir. : ')
